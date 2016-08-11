@@ -688,17 +688,21 @@ elseif playerClass == "DEATHKNIGHT" then
 
 		local ipairs = _G.ipairs
 		local GetTime = _G.GetTime
-		local GetRuneType = _G.GetRuneType
+		--local GetRuneType = _G.GetRuneType
 		local GetRuneCooldown = _G.GetRuneCooldown
 
-		local runes = { "BLOOD", "UNHOLY", "FROST", "DEATH" }
-		local runeOrder = { 1, 2, 5, 6, 3, 4 }
+		--local runes = { "BLOOD", "UNHOLY", "FROST", "DEATH" }
+		--local runeOrder = { 1, 2, 5, 6, 3, 4 }
+		local runeOrder = { 1, 2, 3, 4, 5, 6 }
+		--[[
 		local runeColors = {
 			{ 1, 0.25, 0.25 },	-- BLOOD
 			{ 0.2, 1, 0.2 },	-- UNHOLY
 			{ 0, 0.7, 1 },		-- FROST
 			{ 0.8, 0.1, 1 },	-- DEATH
 		}
+		]]--
+		local runeColor = { 0, 0.7, 1 }
 
 		object.bar = CreateFrame("Frame", nil, object)
 		object.bar:SetPoint("TOPLEFT", 0, 0)
@@ -753,25 +757,28 @@ elseif playerClass == "DEATHKNIGHT" then
 		end
 
 		local function updateRune(btn, id, dontShine)
-			local rune = GetRuneType(id)
+			--local rune = GetRuneType(id)
 			btn:SetAlpha(0.35)
-			if rune then
-				btn:SetVertexColor(unpack(runeColors[rune]))
-				btn.bar:SetStatusBarColor(unpack(runeColors[rune]))
-				btn.bar.flash.tex:SetVertexColor(unpack(runeColors[rune]))
+			--if rune then
+				--btn:SetVertexColor(unpack(runeColors[rune]))
+				btn:SetVertexColor(runeColor[1], runeColor[2], runeColor[3])
+				--btn.bar:SetStatusBarColor(unpack(runeColors[rune]))
+				btn.bar:SetStatusBarColor(runeColor[1], runeColor[2], runeColor[3])
+				--btn.bar.flash.tex:SetVertexColor(unpack(runeColors[rune]))
+				btn.bar.flash.tex:SetVertexColor(runeColor[1], runeColor[2], runeColor[3])
 				btn.bar.flash.tex:SetAlpha(0.25)
 				btn.bar:Show()
 				IUF:UIFrameFlashStop(btn.bar.flash)
 				btn.bar.flash:Hide()
 				updateRuneCooldown(btn, id)
-			else
-				btn:SeVertexColor(0, 0, 0)
-				btn.bar:Hide()
-				if btn.bar:GetScript("OnUpdate") then
-					btn.bar:SetScript("OnUpdate", nil)
-				end
-				--btn.rune = nil
-			end
+			--else
+			--	btn:SeVertexColor(0, 0, 0)
+			--	btn.bar:Hide()
+			--	if btn.bar:GetScript("OnUpdate") then
+			--		btn.bar:SetScript("OnUpdate", nil)
+			--	end
+			--	--btn.rune = nil
+			--end
 		end
 
 		object.bar:SetScript("OnEvent", function(self, event, id, isEnergize)
