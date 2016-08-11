@@ -1569,7 +1569,7 @@ elseif playerClass == "WARLOCK" then
 				else
 					IUF.units.player.classBar:SetHeight(0.001)
 				end
-			elseif IUF.units.player.classBar.addOn.soulShard:IsShown() or IUF.units.player.classBar.addOn.demonicFury:IsShown() or IUF.units.player.classBar.addOn.burningEmber:IsShown() then
+			elseif IUF.units.player.classBar.addOn.soulShard:IsShown() then
 				if IUF.units.player.classBar.addOn.totem:IsShown() then
 					IUF.units.player.classBar:SetHeight(29)
 					IUF.units.player.classBar.addOn:SetHeight(28)
@@ -1606,7 +1606,7 @@ elseif playerClass == "WARLOCK" then
 		object.soulShard:SetPoint("TOPRIGHT", 0, 0)
 		object.soulShard:SetHeight(14)
 		object.soulShard:SetFrameLevel(object:GetFrameLevel())
-		setAddOnBorder(object.soulShard, 4)
+		setAddOnBorder(object.soulShard, 5)
 
 		for _, btn in ipairs(object.soulShard.anchors) do
 			btn:SetAlpha(0)
@@ -1638,7 +1638,7 @@ elseif playerClass == "WARLOCK" then
 					end
 					self.prev = self.value
 				end
-			elseif GetSpecialization() == SPEC_WARLOCK_AFFLICTION and IsPlayerSpell(WARLOCK_SOULBURN) and not UnitHasVehicleUI("player") then
+			elseif (not UnitHasVehicleUI("player")) then
 				if not self:IsShown() then
 					self:Show()
 					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
@@ -1661,130 +1661,6 @@ elseif playerClass == "WARLOCK" then
 		object.soulShard:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
 		object.soulShard:Hide()
 
-		object.demonicFury = CreateFrame("Frame", nil, object)
-		object.demonicFury:SetPoint("TOPLEFT", 0, 0)
-		object.demonicFury:SetPoint("TOPRIGHT", 0, 0)
-		object.demonicFury:SetHeight(14)
-		object.demonicFury:SetFrameLevel(object:GetFrameLevel())
-		setAddOnBorder(object.demonicFury, 1, true)
-		object.demonicFury.anchors[1].bar:SetStatusBarColor(0.62, 0.22, 0.76)
-		object.demonicFury.anchors[1].bar.add = object.demonicFury.anchors[1].bar:CreateTexture(nil, "ARTWORK")
-		object.demonicFury.anchors[1].bar.add:SetAllPoints(object.demonicFury.anchors[1].bar:GetStatusBarTexture())
-		object.demonicFury.anchors[1].bar.add:SetVertexColor(0.62, 0.22, 0.76, 0.5)
-		object.demonicFury.anchors[1].bar.add:SetBlendMode("ADD")
-		object.demonicFury.anchors[1].bar.add:Hide()
-
-		object.demonicFury:SetScript("OnEvent", function(self, event, _, powerType)
-			if event == "UNIT_POWER_FREQUENT" or event == "UNIT_DISPLAYPOWER" then
-				if powerType == "DEMONIC_FURY" or event == "UNIT_DISPLAYPOWER" then
-					self.value = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
-					self.max = UnitPowerMax("player", SPELL_POWER_DEMONIC_FURY)
-					self.anchors[1].bar:SetMinMaxValues(0, self.max)
-					self.anchors[1].bar:SetValue(self.value)
-					IUF:SetStatusBarValue(self.anchors[1].bar.text, 2, self.value, self.max)
-				end
-			elseif event == "UNIT_AURA" then
-				if findBuffById(WARLOCK_METAMORPHOSIS, "PLAYER") then
-					if not self.isMetamorphosis then
-						self.isMetamorphosis = true
-						self.anchors[1].bar.add:Show()
-					end
-				elseif self.isMetamorphosis then
-					self.isMetamorphosis = nil
-					self.anchors[1].bar.add:Hide()
-				end
-			elseif GetSpecialization() == SPEC_WARLOCK_DEMONOLOGY and not UnitHasVehicleUI("player") then
-				if not self:IsShown() then
-					self:Show()
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-					self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
-					self:RegisterUnitEvent("UNIT_AURA", "player")
-					updateVisible()
-				end
-				self:GetScript("OnEvent")(self, "UNIT_DISPLAYPOWER")
-				self:GetScript("OnEvent")(self, "UNIT_AURA")
-			elseif self:IsShown() then
-				self:Hide()
-				self:UnregisterEvent("UNIT_POWER_FREQUENT")
-				self:UnregisterEvent("UNIT_DISPLAYPOWER")
-				self:UnregisterEvent("UNIT_AURA")
-				updateVisible()
-			end
-		end)
-		object.demonicFury:RegisterEvent("PLAYER_ENTERING_WORLD")
-		object.demonicFury:RegisterEvent("PLAYER_TALENT_UPDATE")
-		object.demonicFury:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
-		object.demonicFury:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
-		object.demonicFury:Hide()
-
-		object.burningEmber = CreateFrame("Frame", nil, object)
-		object.burningEmber:SetPoint("TOPLEFT", 0, 0)
-		object.burningEmber:SetPoint("TOPRIGHT", 0, 0)
-		object.burningEmber:SetHeight(14)
-		object.burningEmber:SetFrameLevel(object:GetFrameLevel())
-		setAddOnBorder(object.burningEmber, 4, true)
-
-		for i, btn in ipairs(object.burningEmber.anchors) do
-			btn.bar:SetStatusBarColor(1, 0.37, 0)
-			btn.bar.max = i * 10
-			btn.bar:SetMinMaxValues((i - 1) * 10, btn.bar.max)
-			btn.bar.flash = btn.bar:CreateTexture(nil, "OVERLAY")
-			btn.bar.flash:SetVertexColor(1, 0.9, 0)
-			btn.bar.flash:SetAllPoints()
-			btn.bar.flash:Hide()
-		end
-
-		object.burningEmber:SetScript("OnEvent", function(self, event, _, powerType)
-			if event == "UNIT_POWER_FREQUENT" or event == "UNIT_DISPLAYPOWER" then
-				if powerType == "BURNING_EMBERS" or event == "UNIT_DISPLAYPOWER" then
-					self.value = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
-					self.max = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
-					self.numEmbers = floor(self.max / MAX_POWER_PER_EMBER)
-					if self.num ~= self.numEmbers then
-						setAddOnBorder(self, self.numEmbers)
-					end
-					for _, btn in ipairs(object.burningEmber.anchors) do
-						btn.bar:SetValue(self.value)
-						if btn.bar.max > self.value then
-							if btn.bar.full then
-								btn.bar.full = nil
-								IUF:UIFrameFlashStop(btn.bar.flash)
-								btn.bar.flash:Hide()
-							end
-						elseif not btn.bar.full then
-							btn.bar.full = true
-							if self.ignoreFull then
-								btn.bar.flash:Show()
-							else
-								IUF:UIFrameFlash(btn.bar.flash, 0.25, 0, 0.25, 1)
-							end
-						end
-					end
-					self.ignoreFull = nil
-				end
-			elseif GetSpecialization() == SPEC_WARLOCK_DESTRUCTION and IsPlayerSpell(WARLOCK_BURNING_EMBERS) and not UnitHasVehicleUI("player") then
-				if not self:IsShown() then
-					self:Show()
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-					self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
-					updateVisible()
-				end
-				self.ignoreFull = true
-				self:GetScript("OnEvent")(self, "UNIT_DISPLAYPOWER")
-			elseif self:IsShown() then
-				self:Hide()
-				self:UnregisterEvent("UNIT_POWER_FREQUENT")
-				self:UnregisterEvent("UNIT_DISPLAYPOWER")
-				updateVisible()
-			end
-		end)
-		object.burningEmber:RegisterEvent("PLAYER_ENTERING_WORLD")
-		object.burningEmber:RegisterEvent("PLAYER_TALENT_UPDATE")
-		object.burningEmber:RegisterEvent("SPELLS_CHANGED")
-		object.burningEmber:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
-		object.burningEmber:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
-		object.burningEmber:Hide()
-
 		createTotem(object, MAX_TOTEMS, "BOTTOM", updateVisible)
 	end
 
@@ -1805,21 +1681,6 @@ elseif playerClass == "WARLOCK" then
 								shard.shardBorder = shardBorder
 								break
 							end
-						end
-						shard = _G["BurningEmbersBarFrameEmber"..i]
-						for j = 1, select("#", shard:GetRegions()) do
-							shardBorder = select(j, shard:GetRegions())
-							if shardBorder:GetObjectType() == "Texture" and shardBorder:GetDrawLayer() == "BORDER" then
-								shard.emberBorder = shardBorder
-								break
-							end
-						end
-					end
-					for i = 1, select("#", BurningEmbersBarFrame:GetRegions()) do
-						 shard = select(i, BurningEmbersBarFrame:GetRegions())
-						 if shard:GetDrawLayer() == "BACKGROUND" then
-							BurningEmbersBarFrame.background = shard
-							break
 						end
 					end
 				end
@@ -1844,14 +1705,7 @@ elseif playerClass == "WARLOCK" then
 						shard.shardSmokeB:SetTexCoord(0.51562500, 0.01562500, 0.34375000, 0.59375000)
 						shard.shardFill:SetTexCoord(0.01562500, 0.28125000, 0.00781250, 0.13281250)
 						shard.shardBorder:SetTexCoord(0.01562500, 0.82812500, 0.60937500, 0.83593750)
-						shard = _G["BurningEmbersBarFrameEmber"..i]
-						shard.emberBorder:SetTexCoord(0.15234375, 0.29296875, 0.32812500, 0.93750000)
-						shard.emberBorder:ClearAllPoints()
-						shard.emberBorder:SetAllPoints()
 					end
-					BurningEmbersBarFrame.background:ClearAllPoints()
-					BurningEmbersBarFrame.background:SetAllPoints()
-					BurningEmbersBarFrame.background:SetTexCoord(0.00390625, 0.58203125, 0.01562500, 0.29687500)
 				else
 					TotemFrameTotem2:SetPoint("TOP", object.classBar, "TOP", -19, -8)
 					WarlockPowerFrame:SetPoint("BOTTOM", object.classBar, "BOTTOM", 0, 1)
@@ -1871,16 +1725,7 @@ elseif playerClass == "WARLOCK" then
 						shard.shardSmokeB:SetTexCoord(0.51562500, 0.01562500, 0.59375000, 0.34375000)
 						shard.shardFill:SetTexCoord(0.01562500, 0.28125000, 0.13281250, 0.00781250)
 						shard.shardBorder:SetTexCoord(0.01562500, 0.82812500, 0.83593750, 0.60937500)
-						shard = _G["BurningEmbersBarFrameEmber"..i]
-						shard.emberBorder:SetTexCoord(0.15234375, 0.29296875, 0.93750000, 0.32812500)
-						shard.emberBorder:ClearAllPoints()
-						shard.emberBorder:SetPoint("TOPLEFT", 0, -2)
-						shard.emberBorder:SetPoint("BOTTOMRIGHT", 0, -2)
 					end
-					BurningEmbersBarFrame.background:ClearAllPoints()
-					BurningEmbersBarFrame.background:SetPoint("TOPLEFT", 0, -9)
-					BurningEmbersBarFrame.background:SetPoint("BOTTOMRIGHT", 0, -9)
-					BurningEmbersBarFrame.background:SetTexCoord(0.00390625, 0.58203125, 0.29687500, 0.01562500)
 				end
 				updateTotemDurationText()
 			else
@@ -1893,8 +1738,8 @@ elseif playerClass == "WARLOCK" then
 				object.classBar.addOn:Show()
 				object.classBar.addOn:ClearAllPoints()
 				object.classBar.addOn.soulShard:ClearAllPoints()
-				object.classBar.addOn.demonicFury:ClearAllPoints()
-				object.classBar.addOn.burningEmber:ClearAllPoints()
+				--object.classBar.addOn.demonicFury:ClearAllPoints()
+				--object.classBar.addOn.burningEmber:ClearAllPoints()
 				object.classBar.addOn.totem:ClearAllPoints()
 				local tex = SM:Fetch("statusbar", IUF.db.classBar.texture or "Smooth v2")
 				for _, v in pairs(object.classBar.addOn.totem.anchors) do
@@ -1904,22 +1749,16 @@ elseif playerClass == "WARLOCK" then
 					v:SetTexture(tex)
 					v.flash:SetTexture(tex)
 				end
-				object.classBar.addOn.demonicFury.anchors[1].bar:GetStatusBarTexture(tex)
-				object.classBar.addOn.demonicFury.anchors[1].bar.add:SetTexture(tex)
-				for _, v in pairs(object.classBar.addOn.burningEmber.anchors) do
-					v.bar:SetStatusBarTexture(tex)
-					v.bar.flash:SetTexture(tex)
-				end
 
 				if IUF.db.classBar.pos == "BOTTOM" then
 					object.classBar.addOn:SetPoint("TOPLEFT", object.classBar, "TOPLEFT", 0, 0)
 					object.classBar.addOn:SetPoint("TOPRIGHT", object.classBar, "TOPRIGHT", 0, 0)
 					object.classBar.addOn.soulShard:SetPoint("TOPLEFT", 0, 0)
 					object.classBar.addOn.soulShard:SetPoint("TOPRIGHT", 0, 0)
-					object.classBar.addOn.demonicFury:SetPoint("TOPLEFT", 0, 0)
-					object.classBar.addOn.demonicFury:SetPoint("TOPRIGHT", 0, 0)
-					object.classBar.addOn.burningEmber:SetPoint("TOPLEFT", 0, 0)
-					object.classBar.addOn.burningEmber:SetPoint("TOPRIGHT", 0, 0)
+					--object.classBar.addOn.demonicFury:SetPoint("TOPLEFT", 0, 0)
+					--object.classBar.addOn.demonicFury:SetPoint("TOPRIGHT", 0, 0)
+					--object.classBar.addOn.burningEmber:SetPoint("TOPLEFT", 0, 0)
+					--object.classBar.addOn.burningEmber:SetPoint("TOPRIGHT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("BOTTOMLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("BOTTOMRIGHT", 0, 0)
 				else
@@ -1927,10 +1766,10 @@ elseif playerClass == "WARLOCK" then
 					object.classBar.addOn:SetPoint("BOTTOMRIGHT", object.classBar, "BOTTOMRIGHT", 0, 0)
 					object.classBar.addOn.soulShard:SetPoint("BOTTOMLEFT", 0, 0)
 					object.classBar.addOn.soulShard:SetPoint("BOTTOMRIGHT", 0, 0)
-					object.classBar.addOn.demonicFury:SetPoint("BOTTOMLEFT", 0, 0)
-					object.classBar.addOn.demonicFury:SetPoint("BOTTOMRIGHT", 0, 0)
-					object.classBar.addOn.burningEmber:SetPoint("BOTTOMLEFT", 0, 0)
-					object.classBar.addOn.burningEmber:SetPoint("BOTTOMRIGHT", 0, 0)
+					--object.classBar.addOn.demonicFury:SetPoint("BOTTOMLEFT", 0, 0)
+					--object.classBar.addOn.demonicFury:SetPoint("BOTTOMRIGHT", 0, 0)
+					--object.classBar.addOn.burningEmber:SetPoint("BOTTOMLEFT", 0, 0)
+					--object.classBar.addOn.burningEmber:SetPoint("BOTTOMRIGHT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("TOPLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("TOPRIGHT", 0, 0)
 				end
