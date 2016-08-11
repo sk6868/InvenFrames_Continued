@@ -16,8 +16,8 @@ for i = 1, MAX_BOSS_FRAMES do
 	objectName["boss"..i] = "보스"..i
 end
 
-local objectClass = { "WARRIOR", "PALADIN", "DEATHKNIGHT", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "MONK" }
-local classText = { ["WARRIOR"] = "전사", ["PALADIN"] = "성기사", ["DEATHKNIGHT"] = "죽음의 기사", ["ROGUE"] = "도적", ["PRIEST"] = "사제", ["MAGE"] = "마법사", ["WARLOCK"] = "흑마법사", ["HUNTER"] = "사냥꾼", ["DRUID"] = "드루이드", ["SHAMAN"] = "주술사", ["MONK"] = "수도사" }
+local objectClass = { "WARRIOR", "PALADIN", "DEATHKNIGHT", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "MONK", "DEMONHUNTER" }
+local classText = { ["WARRIOR"] = "전사", ["PALADIN"] = "성기사", ["DEATHKNIGHT"] = "죽음의 기사", ["ROGUE"] = "도적", ["PRIEST"] = "사제", ["MAGE"] = "마법사", ["WARLOCK"] = "흑마법사", ["HUNTER"] = "사냥꾼", ["DRUID"] = "드루이드", ["SHAMAN"] = "주술사", ["MONK"] = "수도사", ["DEMONHUNTER"] = "악마사냥꾼" }
 local classPowerType = { ["WARRIOR"] = 1, ["ROGUE"] = 3, ["DEATHKNIGHT"] = 6 }
 
 local dummy = function() end
@@ -257,45 +257,45 @@ local function createMovingAnchor()
 	IUF.movingFrame.yline:SetPoint("CENTER", IUF.movingFrame, "TOPLEFT", 0, 0)
 	IUF.movingFrame.yline:SetWidth(1)
 	IUF.movingFrame.yline:SetHeight(50)
-	IUF.movingFrame.yline:SetTexture(1, 1, 1)
+	IUF.movingFrame.yline:SetColorTexture(1, 1, 1)
 	IUF.movingFrame.yvalue = IUF.movingFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	IUF.movingFrame.yvalue:SetPoint("BOTTOM", IUF.movingFrame.yline, "TOP", 0, 2)
 	IUF.movingFrame.xline = IUF.movingFrame:CreateTexture(nil, "OVERLAY")
 	IUF.movingFrame.xline:SetPoint("CENTER", IUF.movingFrame, "TOPLEFT", 0, 0)
 	IUF.movingFrame.xline:SetWidth(50)
 	IUF.movingFrame.xline:SetHeight(1)
-	IUF.movingFrame.xline:SetTexture(1, 1, 1)
+	IUF.movingFrame.xline:SetColorTexture(1, 1, 1)
 	IUF.movingFrame.xvalue = IUF.movingFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	IUF.movingFrame.xvalue:SetPoint("RIGHT", IUF.movingFrame.xline, "LEFT", -2, 0)
 	IUF.movingFrame.xcenter = IUF.movingFrame:CreateTexture(nil, "ARTWORK")
-	IUF.movingFrame.xcenter:SetTexture(1, 0, 0)
+	IUF.movingFrame.xcenter:SetColorTexture(1, 0, 0)
 	IUF.movingFrame.xcenter:SetHeight(1)
 	IUF.movingFrame.xcenter:SetPoint("LEFT", UIParent, "LEFT", 0, 0)
 	IUF.movingFrame.xcenter:SetPoint("RIGHT", UIParent, "RIGHT", 0, 0)
 	IUF.movingFrame.ycenter = IUF.movingFrame:CreateTexture(nil, "ARTWORK")
-	IUF.movingFrame.ycenter:SetTexture(1, 0, 0)
+	IUF.movingFrame.ycenter:SetColorTexture(1, 0, 0)
 	IUF.movingFrame.ycenter:SetWidth(1)
 	IUF.movingFrame.ycenter:SetPoint("TOP", UIParent, "TOP", 0, 0)
 	IUF.movingFrame.ycenter:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
 	local pixel, tex = 25
 	for i = 1, 50 do
 		tex = IUF.movingFrame:CreateTexture(nil, "BORDER")
-		tex:SetTexture(0, 0, 0)
+		tex:SetColorTexture(0, 0, 0)
 		tex:SetPoint("LEFT", UIParent, "LEFT", 0, pixel * i)
 		tex:SetPoint("RIGHT", UIParent, "RIGHT", 0, pixel * i)
 		tex:SetHeight(1)
 		tex = IUF.movingFrame:CreateTexture(nil, "BORDER")
-		tex:SetTexture(0, 0, 0)
+		tex:SetColorTexture(0, 0, 0)
 		tex:SetPoint("LEFT", UIParent, "LEFT", 0, -pixel * i)
 		tex:SetPoint("RIGHT", UIParent, "RIGHT", 0, -pixel * i)
 		tex:SetHeight(1)
 		tex = IUF.movingFrame:CreateTexture(nil, "BORDER")
-		tex:SetTexture(0, 0, 0)
+		tex:SetColorTexture(0, 0, 0)
 		tex:SetPoint("TOP", UIParent, "TOP", pixel * i, 0)
 		tex:SetPoint("BOTTOM", UIParent, "BOTTOM", pixel * i, 0)
 		tex:SetWidth(1)
 		tex = IUF.movingFrame:CreateTexture(nil, "BORDER")
-		tex:SetTexture(0, 0, 0)
+		tex:SetColorTexture(0, 0, 0)
 		tex:SetPoint("TOP", UIParent, "TOP", -pixel * i, 0)
 		tex:SetPoint("BOTTOM", UIParent, "BOTTOM", -pixel * i, 0)
 		tex:SetWidth(1)

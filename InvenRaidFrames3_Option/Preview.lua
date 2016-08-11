@@ -26,7 +26,7 @@ local function createButton(btn)
 	return btn
 end
 
-local classList = { "WARRIOR", "PRIEST", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT" }
+local classList = { "WARRIOR", "PRIEST", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "DEMONHUNTER" }
 local powerColor = { WARRIOR = "1", PRIEST = "0", ROGUE = "3", MAGE = "0", WARLOCK = "0", HUNTER = "2", DRUID = "013", SHAMAN = "0", PALADIN = "0", DEATHKNIGHT = "6" }
 local powerMatch = { ["0"] = "MANA", ["1"] = "RAGE", ["2"] = "FOCUS", ["3"] = "ENERGY", ["6"] = "RUNIC_POWER" }
 local allPower = "01236"

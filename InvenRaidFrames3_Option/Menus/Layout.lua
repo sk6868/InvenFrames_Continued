@@ -201,8 +201,8 @@ function Option:CreateHealthBarMenu(menu, parent)
 		end
 	)
 	menu.reset:SetPoint("TOP", menu.orientation, "BOTTOM", 0, -5)
-	local colorList = { "help", "harm", "pet", "vehicle", "offline", "WARRIOR", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "MONK" }
-	local colorLocale = { "우호적 대상", "적대적 대상", "소환수", "탈것 탑승 시", "오프라인일 때", "전사", "도적", "사제", "마법사", "흑마법사", "사냥꾼", "드루이드", "주술사", "성기사", "죽음의 기사", "수도사" }
+	local colorList = { "help", "harm", "pet", "vehicle", "offline", "WARRIOR", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "MONK", "DEMONHUNTER" }
+	local colorLocale = { "우호적 대상", "적대적 대상", "소환수", "탈것 탑승 시", "오프라인일 때", "전사", "도적", "사제", "마법사", "흑마법사", "사냥꾼", "드루이드", "주술사", "성기사", "죽음의 기사", "수도사", "악마사냥꾼" }
 	local function getColor(color)
 		return IRF3.db.colors[color][1], IRF3.db.colors[color][2], IRF3.db.colors[color][3]
 	end

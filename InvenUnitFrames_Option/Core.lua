@@ -940,10 +940,10 @@ function Option:CreateColorMenu(menu, parent)
 	menu.class:SetPoint("TOPLEFT", 5, 10)
 	menu.class:SetPoint("TOPRIGHT", -5, 10)
 	menu.class:SetScale(1.2)
-	local classOrder = { "WARRIOR", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "MONK", "PET", "FRIEND", "NEUTRAL", "ENEMY" }
+	local classOrder = { "WARRIOR", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "MONK", "DEMONHUNTER", "PET", "FRIEND", "NEUTRAL", "ENEMY" }
 	local classNames = {
 		WARRIOR = "전사", ROGUE = "도적", PRIEST = "사제", MAGE = "마법사", WARLOCK = "흑마법사",
-		HUNTER = "사냥꾼", DRUID = "드루이드", SHAMAN = "주술사", PALADIN = "성기사", DEATHKNIGHT = "죽음의 기사", MONK = "수도사",
+		HUNTER = "사냥꾼", DRUID = "드루이드", SHAMAN = "주술사", PALADIN = "성기사", DEATHKNIGHT = "죽음의 기사", MONK = "수도사", DEMONHUNTER = "악마사냥꾼",
 		PET = "소환수", FRIEND = "우호적 대상", NEUTRAL = "중립적 대상", ENEMY = "적대적 대상",
 	}
 	local function classColorUpdate()
@@ -1000,8 +1000,8 @@ function Option:CreateColorMenu(menu, parent)
 		end
 	end
 	menu.power = LBO:CreateWidget("Heading", parent, "파워 색상")
-	menu.power:SetPoint("TOPLEFT", 5, -146)
-	menu.power:SetPoint("TOPRIGHT", -5, -146)
+	menu.power:SetPoint("TOPLEFT", 5, -157)
+	menu.power:SetPoint("TOPRIGHT", -5, -157)
 	menu.power:SetScale(1.2)
 	local function powerColorUpdate()
 		for _, object in pairs(IUF.units) do
