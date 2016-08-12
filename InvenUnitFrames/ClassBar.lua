@@ -271,6 +271,7 @@ local function createTotem(object, num, pos, shown)
 	end
 end
 
+--[[
 local function findBuffById(id, filter)
 	local name, rank = GetSpellInfo(id)
 	--if name then
@@ -289,6 +290,16 @@ local function findBuffById(id, filter)
 			end
 		end
 	--end
+	return nil
+end
+]]--
+
+local function findBuffById(id, filter)
+	local name, rank = GetSpellInfo(id)
+	local _,_,_,stack,_,_,_,_,_,_,buff = UnitBuff("player", name, rank, filter)
+	if buff == id then
+		return true, stack
+	end
 	return nil
 end
 
@@ -352,15 +363,10 @@ if playerClass == "DRUID" then
 		local UnitHasVehicleUI = _G.UnitHasVehicleUI
 		local GetSpecialization = _G.GetSpecialization
 		local GetShapeshiftFormID = _G.GetShapeshiftFormID
-		local GetEclipseDirection = _G.GetEclipseDirection
+		--local GetEclipseDirection = _G.GetEclipseDirection
 
-		local ECLIPSE_MARKER_COORDS = {
-			none = { 0.914, 1.0, 0.82, 1.0 },
-			sun = { 0.914, 1.0, 0.641, 0.82 },
-			moon = { 1.0, 0.914, 0.641, 0.82 },
-		};
-		local ECLIPSE_BAR_SOLAR_BUFF_ID = 171744	-- 태양의 정점
-		local ECLIPSE_BAR_LUNAR_BUFF_ID = 171743	-- 달의 정점
+		local ECLIPSE_BAR_SOLAR_BUFF_ID = 164545	-- Solar Empowerment
+		local ECLIPSE_BAR_LUNAR_BUFF_ID = 164547	-- Lunar Empowerment
 		local ECLIPSE_BAR_SOLAR_BUFF = GetSpellInfo(ECLIPSE_BAR_SOLAR_BUFF_ID)
 		local ECLIPSE_BAR_LUNAR_BUFF = GetSpellInfo(ECLIPSE_BAR_LUNAR_BUFF_ID)
 
@@ -422,110 +428,87 @@ if playerClass == "DRUID" then
 		object.eclipse.moon:SetVertexColor(0.13, 0.2, 0.5, 0.8)
 		object.eclipse.moon:SetPoint("TOPLEFT", object.eclipse.anchors[1], "TOPLEFT", 0, 0)
 		object.eclipse.moon:SetPoint("BOTTOMRIGHT", object.eclipse.anchors[1], "BOTTOM", 0, 0)
+		
+		object.eclipse.moonflash = CreateFrame("Frame", nil, object.eclipse)
+		--object.eclipse.moonflash:GetFrameLevel(object.eclipse.flash:GetFrameLevel())
+		object.eclipse.moonflash.tex = object.eclipse.moonflash:CreateTexture(nil, "BORDER")
+		object.eclipse.moonflash.tex:SetBlendMode("ADD")
+		object.eclipse.moonflash.tex:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+		object.eclipse.moonflash.tex:SetPoint("TOPLEFT", object.eclipse.anchors[1], "TOPLEFT", 0, 0)
+		object.eclipse.moonflash.tex:SetPoint("BOTTOMRIGHT", object.eclipse.anchors[1], "BOTTOM", 0, 0)
+		object.eclipse.moonflash:Hide()
+		object.eclipse.moontext = object.eclipse:CreateFontString(nil, "OVERLAY", "FriendsFont_Small")
+		object.eclipse.moontext:SetPoint("CENTER", object.eclipse.moonflash, "CENTER", 0, 0)
+		
 		object.eclipse.sun = object.eclipse:CreateTexture(nil, "BACKGROUND", nil, -3)
 		object.eclipse.sun:SetVertexColor(0.51, 0.23, 0.03, 0.8)
 		object.eclipse.sun:SetPoint("TOPRIGHT", object.eclipse.anchors[1], "TOPRIGHT", 0, 0)
 		object.eclipse.sun:SetPoint("BOTTOMLEFT", object.eclipse.anchors[1], "BOTTOM", 0, 0)
-		object.eclipse.bar = object.eclipse:CreateTexture(nil, "BACKGROUND", nil, 0)
-		object.eclipse.marker = object.eclipse:CreateTexture(nil, "ARTWORK")
-		object.eclipse.marker:SetSize(20, 20)
-		object.eclipse.marker:SetTexture("Interface\\PlayerFrame\\UI-DruidEclipse")
-		object.eclipse.marker:SetBlendMode("ADD")
-		object.eclipse.marker:SetTexCoord(unpack(ECLIPSE_MARKER_COORDS.none))
-		object.eclipse.marker:SetPoint("CENTER", 0, 0)
-		object.eclipse.flash = CreateFrame("Frame", nil, object.eclipse)
-		object.eclipse.flash:GetFrameLevel(object.eclipse.flash:GetFrameLevel())
-		object.eclipse.flash.tex = object.eclipse.flash:CreateTexture(nil, "BORDER")
-		object.eclipse.flash.tex:SetBlendMode("ADD")
-		object.eclipse.flash.tex:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
-		object.eclipse.flash.tex:SetAllPoints()
-		object.eclipse.flash:Hide()
-		object.eclipse.text = object.eclipse:CreateFontString(nil, "OVERLAY", "FriendsFont_Small")
-		object.eclipse.text:SetPoint("CENTER", 0, 0)
+		
+		object.eclipse.sunflash = CreateFrame("Frame", nil, object.eclipse)
+		object.eclipse.sunflash.tex = object.eclipse.sunflash:CreateTexture(nil, "BORDER")
+		object.eclipse.sunflash.tex:SetBlendMode("ADD")
+		object.eclipse.sunflash.tex:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+		object.eclipse.sunflash.tex:SetPoint("TOPRIGHT", object.eclipse.anchors[1], "TOPRIGHT", 0, 0)
+		object.eclipse.sunflash.tex:SetPoint("BOTTOMLEFT", object.eclipse.anchors[1], "BOTTOM", 0, 0)
+		object.eclipse.sunflash:Hide()
+		object.eclipse.suntext = object.eclipse:CreateFontString(nil, "OVERLAY", "FriendsFont_Small")
+		object.eclipse.suntext:SetPoint("CENTER", object.eclipse.sunflash, "CENTER", 0, 0)
+
 		object.eclipse:Hide()
 
 		object.eclipse:SetScript("OnEvent", function(self, event, dir, powerType)
 			if event == "UNIT_AURA" then
-				if findBuffById(ECLIPSE_BAR_SOLAR_BUFF_ID, "PLAYER") then
-					if self.flash.anchor ~= self.sun then
-						self.flash.anchor = self.sun
-						self.flash:SetAllPoints(self.sun)
-						self.flash.tex:SetVertexColor(0.97, 0.84, 0.22, 0.25)
-						IUF:RegisterFlash(self.flash)
+				local found, stacks = findBuffById(ECLIPSE_BAR_SOLAR_BUFF_ID, "PLAYER")
+				if found then
+					if self.sunflash.anchor ~= self.sun then
+						self.sunflash.anchor = self.sun
+						self.sunflash:SetAllPoints(self.sun)
+						self.sunflash.tex:SetVertexColor(0.97, 0.84, 0.22, 0.75)
+						IUF:RegisterFlash(self.sunflash)
 					end
-				elseif findBuffById(ECLIPSE_BAR_LUNAR_BUFF_ID, "PLAYER") then
-					if self.flash.anchor ~= self.moon then
-						self.flash.anchor = self.moon
-						self.flash:SetAllPoints(self.moon)
-						self.flash.tex:SetVertexColor(0.35, 0.65, 0.87, 0.25)
-						IUF:RegisterFlash(self.flash)
+					object.eclipse.suntext:SetFormattedText("%d", stacks)
+				else
+					if (self.sunflash.anchor or self.sunflash:IsShown()) then
+						self.sunflash.anchor = nil
+						IUF:UnregisterFlash(self.sunflash)
 					end
-				elseif self.flash.anchor or self.flash:IsShown() then
-					self.flash.anchor = nil
-					IUF:UnregisterFlash(self.flash)
+					object.eclipse.suntext:SetText("")
 				end
-			elseif event == "ECLIPSE_DIRECTION_CHANGE" then
-				self.marker:SetTexCoord(unpack(ECLIPSE_MARKER_COORDS[dir] or ECLIPSE_MARKER_COORDS.none))
-			elseif event == "UNIT_POWER_FREQUENT" or event == "UNIT_MAXPOWER" then
-				if powerType == "ECLIPSE" then
-					self.cur = UnitPower("player", 8)
-					self.max = UnitPowerMax("player", 8)
-					if self.cur == 0 or self.max == 0 then
-						self.barType = 0
-						self.bar:Hide()
-						self.marker:SetPoint("CENTER", 0, 0)
-						self.text:SetText(0)
-					else
-						if self.cur > 0 then
-							if self.barType ~= 1 then
-								self.barType = 1
-								self.bar:Show()
-								self.bar:ClearAllPoints()
-								self.bar:SetPoint("TOPLEFT", self.sun, "TOPLEFT", 0, 0)
-								self.bar:SetPoint("BOTTOMLEFT", self.sun, "BOTTOMLEFT", 0, 0)
-								self.bar:SetVertexColor(0.97, 0.84, 0.22)
-								self.anchor = self.sun
-								self.marker:SetPoint("CENTER", self.bar, "RIGHT", 0, 0)
-							end
-						elseif self.barType ~= -1 then
-							self.barType = -1
-							self.bar:Show()
-							self.bar:ClearAllPoints()
-							self.bar:SetPoint("TOPRIGHT", self.moon, "TOPRIGHT", 0, 0)
-							self.bar:SetPoint("BOTTOMRIGHT", self.moon, "BOTTOMRIGHT", 0, 0)
-							self.bar:SetVertexColor(0.35, 0.65, 0.87)
-							self.anchor = self.moon
-							self.marker:SetPoint("CENTER", self.bar, "LEFT", 0, 0)
-						end
-						self.width = self.anchor:GetWidth()
-						if self.width <= 0 then
-							self.width = self.anchors[1]:GetWidth() / 2
-						end
-						self.cur = abs(self.cur / self.max)
-						self.bar:SetWidth(max(self.cur * self.width, 0.001))
-						self.text:SetFormattedText("%d", self.cur * 100)
+				found, stacks = findBuffById(ECLIPSE_BAR_LUNAR_BUFF_ID, "PLAYER")
+				if found then
+					if self.moonflash.anchor ~= self.moon then
+						self.moonflash.anchor = self.moon
+						self.moonflash:SetAllPoints(self.moon)
+						self.moonflash.tex:SetVertexColor(0.35, 0.65, 0.87, 0.75)
+						IUF:RegisterFlash(self.moonflash)
 					end
+					object.eclipse.moontext:SetFormattedText("%d", stacks)
+				else
+					if (self.moonflash.anchor or self.moonflash:IsShown()) then
+						self.moonflash.anchor = nil
+						IUF:UnregisterFlash(self.moonflash)
+					end
+					object.eclipse.moontext:SetText("")
 				end
 			elseif GetSpecialization() == 1 and not UnitHasVehicleUI("player") and (not GetShapeshiftFormID() or GetShapeshiftFormID() == MOONKIN_FORM) then
 				if not self:IsShown() then
 					self:Show()
-					self:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
-					self:RegisterUnitEvent("UNIT_MAXPOWER", "player")
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+					--self:RegisterEvent("ECLIPSE_DIRECTION_CHANGE")
 					self:RegisterUnitEvent("UNIT_AURA", "player")
 					updateVisible()
 				end
-				self.flash.anchor = nil
-				self:onEvent("ECLIPSE_DIRECTION_CHANGE", GetEclipseDirection() or "none")
-				self:onEvent("UNIT_POWER_FREQUENT", nil, "ECLIPSE")
+				self.sunflash.anchor = nil
+				self.moonflash.anchor = nil
+				--self:onEvent("ECLIPSE_DIRECTION_CHANGE", GetEclipseDirection() or "none")
 				self:onEvent("UNIT_AURA")
 			elseif self:IsShown() then
 				self:Hide()
-				self.flash.anchor = nil
-				IUF:UnregisterFlash(self.flash)
-				self:UnregisterEvent("ECLIPSE_DIRECTION_CHANGE")
-				self:UnregisterEvent("UNIT_MAXPOWER")
-				self:UnregisterEvent("UNIT_POWER_FREQUENT")
+				self.sunflash.anchor = nil
+				self.moonflash.anchor = nil
+				IUF:UnregisterFlash(self.sunflash)
+				IUF:UnregisterFlash(self.moonflash)
+				--self:UnregisterEvent("ECLIPSE_DIRECTION_CHANGE")
 				self:UnregisterEvent("UNIT_AURA")
 				updateVisible()
 			end
@@ -536,11 +519,6 @@ if playerClass == "DRUID" then
 		object.eclipse:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 		object.eclipse:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
 		object.eclipse:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
-		object.eclipse:HookScript("OnSizeChanged", function(self)
-			if self:IsShown() then
-				self:onEvent("UNIT_POWER_FREQUENT", nil, "ECLIPSE")
-			end
-		end)
 		object.eclipse:SetScript("OnEnter", function(self)
 			GameTooltip_SetDefaultAnchor(GameTooltip, self)
 			GameTooltip:SetText(BALANCE, 1, 1, 1)
@@ -610,7 +588,6 @@ if playerClass == "DRUID" then
 				local tex = SM:Fetch("statusbar", IUF.db.classBar.texture or "Smooth v2")
 				object.classBar.addOn.mana.anchors[1].bar:SetStatusBarTexture(tex)
 				object.classBar.addOn.mana.anchors[1].bar:SetStatusBarColor(self.colordb.power[0][1], self.colordb.power[0][2], self.colordb.power[0][3])
-				object.classBar.addOn.eclipse.bar:SetTexture(tex)
 				object.classBar.addOn.eclipse.moon:SetTexture(tex)
 				object.classBar.addOn.eclipse.sun:SetTexture(tex)
 				for _, v in pairs(object.classBar.addOn.totem.anchors) do
@@ -621,8 +598,10 @@ if playerClass == "DRUID" then
 					object.classBar.addOn:SetPoint("TOPRIGHT", object.classBar, "TOPRIGHT", 0, 0)
 					object.classBar.addOn.mana:SetPoint("TOPLEFT", 0, 0)
 					object.classBar.addOn.mana:SetPoint("TOPRIGHT", 0, 0)
-					object.classBar.addOn.eclipse:SetPoint("TOPLEFT", 0, 0)
-					object.classBar.addOn.eclipse:SetPoint("TOPRIGHT", 0, 0)
+					--object.classBar.addOn.eclipse:SetPoint("TOPLEFT", 0, 0)
+					object.classBar.addOn.eclipse:SetPoint("TOPLEFT", 0, -1*object.classBar.addOn.mana:GetHeight())
+					--object.classBar.addOn.eclipse:SetPoint("TOPRIGHT", 0, 0)
+					object.classBar.addOn.eclipse:SetPoint("TOPRIGHT", 0, -1*object.classBar.addOn.mana:GetHeight())
 					object.classBar.addOn.totem:SetPoint("BOTTOMLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("BOTTOMRIGHT", 0, 0)
 				else
@@ -630,8 +609,10 @@ if playerClass == "DRUID" then
 					object.classBar.addOn:SetPoint("BOTTOMRIGHT", object.classBar, "BOTTOMRIGHT", 0, 0)
 					object.classBar.addOn.mana:SetPoint("BOTTOMLEFT", 0, 0)
 					object.classBar.addOn.mana:SetPoint("BOTTOMRIGHT", 0, 0)
-					object.classBar.addOn.eclipse:SetPoint("BOTTOMLEFT", 0, 0)
-					object.classBar.addOn.eclipse:SetPoint("BOTTOMRIGHT", 0, 0)
+					--object.classBar.addOn.eclipse:SetPoint("BOTTOMLEFT", 0, 0)
+					object.classBar.addOn.eclipse:SetPoint("BOTTOMLEFT", 0, object.classBar.addOn.mana:GetHeight())
+					--object.classBar.addOn.eclipse:SetPoint("BOTTOMRIGHT", 0, 0)
+					object.classBar.addOn.eclipse:SetPoint("BOTTOMRIGHT", 0, object.classBar.addOn.mana:GetHeight())
 					object.classBar.addOn.totem:SetPoint("TOPLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("TOPRIGHT", 0, 0)
 				end
@@ -899,10 +880,7 @@ elseif playerClass == "PRIEST" then
 					IUF.units.player.classBar:SetHeight(0.001)
 				end
 			else
-				if IUF.units.player.classBar.addOn.totem:IsShown() and IUF.units.player.classBar.addOn.bar:IsShown() then
-					IUF.units.player.classBar:SetHeight(29)
-					IUF.units.player.classBar.addOn:SetHeight(28)
-				elseif IUF.units.player.classBar.addOn.totem:IsShown() or IUF.units.player.classBar.addOn.bar:IsShown() then
+				if IUF.units.player.classBar.addOn.totem:IsShown() then
 					IUF.units.player.classBar:SetHeight(15)
 					IUF.units.player.classBar.addOn:SetHeight(14)
 				else
@@ -923,62 +901,6 @@ elseif playerClass == "PRIEST" then
 		local UnitPower = _G.UnitPower
 		local UnitLevel = _G.UnitLevel
 		local UnitHasVehicleUI = _G.UnitHasVehicleUI
-
-		object.bar = CreateFrame("Frame", nil, object)
-		object.bar:SetPoint("TOPLEFT", 0, 0)
-		object.bar:SetPoint("TOPRIGHT", 0, 0)
-		object.bar:SetHeight(14)
-		object.bar:SetFrameLevel(object:GetFrameLevel())
-		setAddOnBorder(object.bar, PRIEST_BAR_NUM_ORBS)
-
-		for _, btn in ipairs(object.bar.anchors) do
-			btn:SetAlpha(0)
-			btn:SetVertexColor(0.62, 0.22, 0.76)
-			btn.flash = object.bar:CreateTexture(nil, "BORDER")
-			btn.flash:SetVertexColor(0.62, 0.22, 0.76)
-			btn.flash:SetBlendMode("ADD")
-			btn.flash:SetAllPoints(btn)
-			btn.flash:Hide()
-		end
-
-		object.bar:SetScript("OnEvent", function(self, event, _, powerType)
-			if event == "UNIT_POWER_FREQUENT" or event == "UNIT_DISPLAYPOWER" then
-				if powerType == "SHADOW_ORBS" or event == "UNIT_DISPLAYPOWER" then
-					self.numOrb = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
-					for i = 1, self.numOrb do
-						self.anchors[i]:SetAlpha(1)
-					end
-					for i = self.prevOrb + 1, self.numOrb do
-						IUF:UIFrameFlash(self.anchors[i].flash, 0.25, 0.25, 0.5)
-					end
-					for i = self.numOrb + 1, PRIEST_BAR_NUM_ORBS do
-						self.anchors[i]:SetAlpha(0)
-						IUF:UIFrameFlashStop(self.anchors[i].flash)
-					end
-					self.prevOrb = self.numOrb
-				end
-			elseif UnitLevel("player") >= SHADOW_ORBS_SHOW_LEVEL and GetSpecialization() == SPEC_PRIEST_SHADOW and not UnitHasVehicleUI("player") then
-				if not self:IsShown() then
-					self:Show()
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-					self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
-					updateVisible()
-				end
-				self.prevOrb = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
-				self:GetScript("OnEvent")(self, "UNIT_POWER_FREQUENT", nil, "SHADOW_ORBS")
-			elseif self:IsShown() then
-				self:Hide()
-				self:UnregisterEvent("UNIT_POWER_FREQUENT")
-				self:UnregisterEvent("UNIT_DISPLAYPOWER")
-				updateVisible()
-			end
-		end)
-		object.bar:RegisterEvent("PLAYER_ENTERING_WORLD")
-		object.bar:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
-		object.bar:RegisterEvent("PLAYER_LEVEL_UP")
-		object.bar:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
-		object.bar:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
-		object.bar:Hide()
 
 		createTotem(object, MAX_TOTEMS, "BOTTOM", updateVisible)
 	end
@@ -1043,28 +965,19 @@ elseif playerClass == "PRIEST" then
 				end
 				object.classBar.addOn:Show()
 				object.classBar.addOn:ClearAllPoints()
-				object.classBar.addOn.bar:ClearAllPoints()
 				object.classBar.addOn.totem:ClearAllPoints()
 				local tex = SM:Fetch("statusbar", IUF.db.classBar.texture or "Smooth v2")
 				for _, v in pairs(object.classBar.addOn.totem.anchors) do
 					v.bar:SetStatusBarTexture(tex)
 				end
-				for _, v in pairs(object.classBar.addOn.bar.anchors) do
-					v:SetTexture(tex)
-					v.flash:SetTexture(tex)
-				end
 				if IUF.db.classBar.pos == "BOTTOM" then
 					object.classBar.addOn:SetPoint("TOPLEFT", object.classBar, "TOPLEFT", 0, 0)
 					object.classBar.addOn:SetPoint("TOPRIGHT", object.classBar, "TOPRIGHT", 0, 0)
-					object.classBar.addOn.bar:SetPoint("TOPLEFT", 0, 0)
-					object.classBar.addOn.bar:SetPoint("TOPRIGHT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("BOTTOMLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("BOTTOMRIGHT", 0, 0)
 				else
 					object.classBar.addOn:SetPoint("BOTTOMLEFT", object.classBar, "BOTTOMLEFT", 0, 0)
 					object.classBar.addOn:SetPoint("BOTTOMRIGHT", object.classBar, "BOTTOMRIGHT", 0, 0)
-					object.classBar.addOn.bar:SetPoint("BOTTOMLEFT", 0, 0)
-					object.classBar.addOn.bar:SetPoint("BOTTOMRIGHT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("TOPLEFT", 0, 0)
 					object.classBar.addOn.totem:SetPoint("TOPRIGHT", 0, 0)
 				end
@@ -1155,14 +1068,21 @@ elseif playerClass == "PALADIN" then
 					self.prevHoly = self.holy
 				end
 			elseif UnitLevel("player") >= PALADINPOWERBAR_SHOW_LEVEL and not UnitHasVehicleUI("player") then
-				if not self:IsShown() then
-					self:Show()
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-					self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+				if GetSpecialization() == SPEC_PALADIN_RETRIBUTION then
+					if not self:IsShown() then
+						self:Show()
+						self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+						self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+						updateVisible()
+					end
+					self.prevHoly = UnitPower("player", SPELL_POWER_HOLY_POWER)
+					self:GetScript("OnEvent")(self, "UNIT_POWER_FREQUENT", nil, "HOLY_POWER")
+				else
+					self:UnregisterEvent("UNIT_POWER_FREQUENT")
+					self:UnregisterEvent("UNIT_DISPLAYPOWER")
+					self:Hide()
 					updateVisible()
 				end
-				self.prevHoly = UnitPower("player", SPELL_POWER_HOLY_POWER)
-				self:GetScript("OnEvent")(self, "UNIT_POWER_FREQUENT", nil, "HOLY_POWER")
 			elseif self:IsShown() then
 				self:Hide()
 				self:UnregisterEvent("UNIT_POWER_FREQUENT")
@@ -1172,6 +1092,7 @@ elseif playerClass == "PALADIN" then
 		end)
 		object.bar:RegisterEvent("PLAYER_ENTERING_WORLD")
 		object.bar:RegisterEvent("PLAYER_LEVEL_UP")
+		object.bar:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", "player")
 		object.bar:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
 		object.bar:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
 		object.bar:Hide()
@@ -1370,7 +1291,7 @@ elseif playerClass == "MONK" then
 		end)
 		object.mana:RegisterEvent("PLAYER_ENTERING_WORLD")
 		object.mana:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
-		object.mana:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+		object.mana:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", "player")
 		object.mana:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
 		object.mana:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
 		object.mana:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
@@ -1418,21 +1339,28 @@ elseif playerClass == "MONK" then
 
 		object.bar:SetScript("OnEvent", function(self, event, _, powerType)
 			if event == "UNIT_POWER_FREQUENT" then
-				if powerType == "CHI" or powerType == "LIGHT_FORCE" or powerType == "DARK_FORCE" then
+				if powerType == "CHI" then
 					updateChi(self)
 				end
 			elseif event == "UNIT_DISPLAYPOWER" or event == "PLAYER_TALENT_UPDATE" then
 				self.prevChi = UnitPower("player", chi)
 				updateChi(self)
 			elseif not UnitHasVehicleUI("player") then
-				if not self:IsShown() then
-					self:Show()
-					self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
-					self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+				if (GetSpecialization() == SPEC_MONK_WINDWALKER) then
+					if not self:IsShown() then
+						self:Show()
+						self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+						self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+						updateVisible()
+					end
+					self.prevChi = UnitPower("player", chi)
+					updateChi(self)
+				else
+					self:UnregisterEvent("UNIT_POWER_FREQUENT")
+					self:UnregisterEvent("UNIT_DISPLAYPOWER")
+					self:Hide()
 					updateVisible()
 				end
-				self.prevChi = UnitPower("player", chi)
-				updateChi(self)
 			elseif self:IsShown() then
 				self:Hide()
 				self:UnregisterEvent("UNIT_POWER_FREQUENT")
@@ -1442,6 +1370,7 @@ elseif playerClass == "MONK" then
 		end)
 		object.bar:RegisterEvent("PLAYER_ENTERING_WORLD")
 		object.bar:RegisterEvent("PLAYER_TALENT_UPDATE")
+		object.bar:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", "player")
 		object.bar:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
 		object.bar:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
 		object.bar:Hide()

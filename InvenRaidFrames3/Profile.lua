@@ -2,7 +2,7 @@ local IRF3 = _G[...]
 local wipe = _G.table.wipe
 local LBDB = LibStub("LibBlueDB-1.0")
 
-IRF3.classes = { "WARRIOR", "DRUID", "PALADIN", "DEATHKNIGHT", "PRIEST", "SHAMAN", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "MONK" }
+IRF3.classes = { "WARRIOR", "DRUID", "PALADIN", "DEATHKNIGHT", "PRIEST", "SHAMAN", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "MONK", "DEMONHUNTER" }
 local function newTable() return {} end
 local defaultProfile = "기본값"
 local colorWhite = { 1, 1, 1 }
@@ -24,7 +24,7 @@ local default = {
 	grouporder = { 1, 2, 3, 4, 5, 6, 7, 8 },
 	groupshown = { true, true, true, true, true, true, true, true },
 	classorder = IRF3.classes,
-	classshown = { WARRIOR = true, DRUID = true, PALADIN = true, DEATHKNIGHT = true, PRIEST = true, SHAMAN = true, ROGUE = true, MAGE = true, WARLOCK = true, HUNTER = true, MONK = true },
+	classshown = { WARRIOR = true, DRUID = true, PALADIN = true, DEATHKNIGHT = true, PRIEST = true, SHAMAN = true, ROGUE = true, MAGE = true, WARLOCK = true, HUNTER = true, MONK = true, DEMONHUNTER = true },
 	useManager = true, managerPos = 25,
 	castingSent = 0,	-- 0:사용 안함 1: 항상 표시 2: 마우스 오버시 표시
 	units = {

@@ -579,6 +579,7 @@
 							<Button name="$parent9" parentKey="PALADIN" frameLevel="14" inherits="InvenRaidFrames3ManagerGroupButtonTemplate"/>
 							<Button name="$parent10" parentKey="DEATHKNIGHT" frameLevel="14" inherits="InvenRaidFrames3ManagerGroupButtonTemplate"/>
 							<Button name="$parent11" parentKey="MONK" frameLevel="14" inherits="InvenRaidFrames3ManagerGroupButtonTemplate"/>
+							<Button name="$parent12" parentKey="DEMONHUNTER" frameLevel="14" inherits="InvenRaidFrames3ManagerGroupButtonTemplate"/>
 						</Frames>
 					</Frame>
 				</Frames>
