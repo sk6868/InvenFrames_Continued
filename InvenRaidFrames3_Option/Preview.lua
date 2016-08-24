@@ -27,7 +27,7 @@ local function createButton(btn)
 end
 
 local classList = { "WARRIOR", "PRIEST", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "DEMONHUNTER" }
-local powerColor = { WARRIOR = "1", PRIEST = "0", ROGUE = "3", MAGE = "0", WARLOCK = "0", HUNTER = "2", DRUID = "013", SHAMAN = "0", PALADIN = "0", DEATHKNIGHT = "6" }
+local powerColor = { WARRIOR = "1", PRIEST = "0", ROGUE = "3", MAGE = "0", WARLOCK = "0", HUNTER = "2", DRUID = "013", SHAMAN = "0", PALADIN = "0", DEATHKNIGHT = "6", DEMONHUNTER = "0"}
 local powerMatch = { ["0"] = "MANA", ["1"] = "RAGE", ["2"] = "FOCUS", ["3"] = "ENERGY", ["6"] = "RUNIC_POWER" }
 local allPower = "01236"
 
@@ -116,7 +116,7 @@ local function createPreview()
 	end
 end
 
-local numMembers = { 0, 1, 2, 5, 8 }
+local numMembers = { 0, 1, 2, 4, 5, 6, 8 }
 local LIST = {}
 
 local function checkHeader(show, index)
@@ -183,7 +183,7 @@ function Option:SetPreview(show)
 						preview.headers[i].partyTag:SetWidth(12)
 						preview.headers[i].partyTag.text:SetText(i)
 					end
-					preview.headers[i].partyTag.tex:SetTexture(IRF3.db.partyTagRaid[1], IRF3.db.partyTagRaid[2], IRF3.db.partyTagRaid[3], IRF3.db.partyTagRaid[4])
+					preview.headers[i].partyTag.tex:SetColorTexture(IRF3.db.partyTagRaid[1], IRF3.db.partyTagRaid[2], IRF3.db.partyTagRaid[3], IRF3.db.partyTagRaid[4])
 					preview.headers[i].partyTag:Show()
 				else
 					preview.headers[i].partyTag:SetHeight(0.001)

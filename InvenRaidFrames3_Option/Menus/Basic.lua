@@ -53,7 +53,7 @@ function Option:CreateUseMenu(menu, parent)
 		end
 	)
 	menu.mapButtonToggle:SetPoint("TOP", menu.tooltip, "BOTTOM", 0, 0)
-	menu.mapButtonLock = LBO:CreateWidget("CheckBox", parent, "미니맵 버튼 고정", "미니맵 버튼를 고정합니다.", nil,
+	menu.mapButtonLock = LBO:CreateWidget("CheckBox", parent, "미니맵 버튼 고정", "미니맵 버튼을 고정합니다.", nil,
 		function() return not InvenRaidFrames3DB.minimapButton.show end, nil,
 		function() return not InvenRaidFrames3DB.minimapButton.dragable end,
 		function(v)

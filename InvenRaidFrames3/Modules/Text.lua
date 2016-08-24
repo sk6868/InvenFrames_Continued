@@ -178,14 +178,14 @@ local unitName, unitNameLen, prevPlayerGroup
 
 function InvenRaidFrames3Member_UpdateName(self)
 	if self.unit ~= "player" and UnitIsUnit("player", self.unit) and self:GetParent().partyTag then
-		self:GetParent().partyTag.tex:SetTexture(unpack(IRF3.db.partyTagParty))
+		self:GetParent().partyTag.tex:SetColorTexture(unpack(IRF3.db.partyTagParty))
 		IRF3.playerRaidIndex = self.unit:match("raid(%d+)")
 		if IRF3.playerRaidIndex then
 			IRF3.playerRaidIndex = tonumber(IRF3.playerRaidIndex)
 			prevPlayerGroup = IRF3.playerGroup
 			IRF3.playerGroup = select(3, GetRaidRosterInfo(IRF3.playerRaidIndex))
 			if prevPlayerGroup and prevPlayerGroup ~= IRF3.playerGroup then
-				IRF3.headers[prevPlayerGroup].partyTag.tex:SetTexture(unpack(IRF3.db.partyTagRaid))
+				IRF3.headers[prevPlayerGroup].partyTag.tex:SetColorTexture(unpack(IRF3.db.partyTagRaid))
 			end
 		end
 	end
@@ -207,9 +207,18 @@ function InvenRaidFrames3Member_UpdateName(self)
 end
 
 function InvenRaidFrames3Member_UpdateNameColor(self)
-	if IRF3.db.colors[self.class] and (self.optionTable.className or (self.isOffline and self.optionTable.offlineName) or (self.outRange and self.optionTable.outRangeName) or ((self.isGhost or self.isDead) and self.optionTable.deathName)) then
-		self.name:SetTextColor(IRF3.db.colors[self.class][1], IRF3.db.colors[self.class][2], IRF3.db.colors[self.class][3])
-	else
-		self.name:SetTextColor(IRF3.db.colors.name[1], IRF3.db.colors.name[2], IRF3.db.colors.name[3])
+	if IRF3.db.colors[self.class] and (self.optionTable.className or (self.isOffline and self.optionTable.offlineName) or (self.outRange and self.optionTable.outRangeName) or ((self.isGhost or self.isDead) and self.optionTable.deathName)) then 
+
+		if self.outRange and (self.isGhost or self.isDead) then
+			self.name:SetTextColor(IRF3.db.colors[self.class][1], IRF3.db.colors[self.class][2], IRF3.db.colors[self.class][3], 0.55)
+			else
+			self.name:SetTextColor(IRF3.db.colors[self.class][1], IRF3.db.colors[self.class][2], IRF3.db.colors[self.class][3], 1.00)
+		end
+
+		else
+		if self.outRange and (self.isGhost or self.isDead) then 
+		self.name:SetTextColor(IRF3.db.colors.name[1], IRF3.db.colors.name[2], IRF3.db.colors.name[3], 0.55)
+		else self.name:SetTextColor(IRF3.db.colors.name[1], IRF3.db.colors.name[2], IRF3.db.colors.name[3], 1.00)
+		end
 	end
 end

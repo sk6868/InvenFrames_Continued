@@ -8,11 +8,11 @@ local UnitHasIncomingResurrection = _G.UnitHasIncomingResurrection
 
 local SL = IRF3.GetSpellName
 local resurrectionSpells = {
-	[SL(2006)] = true,
-	[SL(2008)] = true,
-	[SL(7328)] = true,
-	[SL(50769)] = true,
-	[SL(115178)] = true,
+	[SL(2006)] = true,  --priest
+	[SL(2008)] = true,  --shaman
+	[SL(7328)] = true,  --Paladin
+	[SL(50769)] = true,  --Druid
+	[SL(115178)] = true, --Monk
 }
 
 function InvenRaidFrames3Member_HideResurrection(self, noHideCenterIcon)

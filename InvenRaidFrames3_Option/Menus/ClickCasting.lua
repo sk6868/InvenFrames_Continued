@@ -411,7 +411,7 @@ end
 
 function Option:UpdateClickCasting()
 	if Option.talentGroup and Option.clickKeys then
-		Option.talentGroup:SetFormattedText("현재 활성화된 특성: %s", IRF3.talent == 1 and TALENT_SPEC_PRIMARY or TALENT_SPEC_SECONDARY)
+		Option.talentGroup:SetFormattedText("현재 활성화된 특성: %s", select(2, GetSpecializationInfo(GetSpecialization())))
 		if Option.clickKeys:IsVisible() then
 			CloseDropDownMenus(1)
 			LBO:Refresh(Option.clickKeys)

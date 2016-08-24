@@ -86,7 +86,7 @@ Option.mainBorder:SetBackdrop({
 Option.mainBorder:SetPoint("TOPLEFT", Option.title, "BOTTOMLEFT", 1, -26)
 Option.mainBorder:SetPoint("BOTTOMRIGHT", Option, "BOTTOMLEFT", 163, 39)
 
-local previewList = { "미리 보기 끄기", "미리 보기 - 5인", "미리 보기 - 10인", "미리 보기 - 25인", "미리 보기 - 40인" }
+local previewList = { "미리 보기 끄기", "미리 보기 - 5인", "미리 보기 - 10인", "미리 보기 - 20인", "미리 보기 - 25인", "미리 보기 - 30인", "미리 보기 - 40인" }
 Option.previewDropdown = LBO:CreateWidget("DropDown", Option, "", "미리 보기를 활성화 혹은 비활성화합니다.", nil, nil, true,
 	function() return Option:GetPreviewState(), previewList end,
 	function(v)

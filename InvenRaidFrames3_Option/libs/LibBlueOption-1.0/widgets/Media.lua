@@ -226,7 +226,7 @@ LBO:RegisterWidget(widget, version, function(self, name)
 	self.texture:SetPoint("TOPLEFT", 7, -3)
 	self.texture:SetPoint("BOTTOMRIGHT", 3, 3)
 	self.textureBG = self.over:CreateTexture(nil, "BORDER")
-	self.textureBG:SetTexture(0, 0, 0)
+	self.textureBG:SetColorTexture(0, 0, 0)
 	self.textureBG:SetAllPoints(self.texture)
 	self.Setup = update
 	self.DropdownDisable = self.Disable

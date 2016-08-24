@@ -5,12 +5,10 @@ local wipe = _G.table.wipe
 local InCombatLockdown = _G.InCombatLockdown
 local GetSpellInfo = _G.GetSpellInfo
 local SpellHasRange = _G.SpellHasRange
-local GetActiveSpecGroup = _G.GetActiveSpecGroup
 local GetSpecialization = _G.GetSpecialization
 local GetSpecializationInfo = _G.GetSpecializationInfo
 local talent, specId, ctype, ckey, ckey1, ckey2, spellName, wheelScript, wheelCount, prev_wheelCount
 local modifilters = { [""] = true, ["alt-"] = true, ["ctrl-"] = true, ["shift-"] = true, ["alt-ctrl-"] = true, ["alt-shift-"] = true, ["ctrl-shift-"] = true }
-
 IRF3.numMouseButtons = 15
 local startWheelButton = 31
 local clearWheelBinding = "self:ClearBindings()"
@@ -19,95 +17,111 @@ local state = {}
 IRF3.overrideClickCastingSpells = {
 	ROGUE = {
 		-- 암살
-		["독살"] = "절개",
-		["속결"] = "사악한 일격",
+		-- 무법
+		["교섭"] = "실명",
+		["난도질"] = "뼈주사위",
 		-- 잠행
-		["과다출혈"] = "사악한 일격",
-		-- 특성
-		["투척 표창"] = "투척",
+		["어둠칼날"] = "기습",
 	},
 	DRUID = {
+		--조화 특성
+		["화신: 엘룬의 선택"] = "천체의 정렬",
+		--야성 특성
+		["화신: 밀림의 왕"] = "광폭화",
+		["잔혹한 베기"] = "휘둘러치기",
 	},
 	MAGE = {
-		-- 비전
-		["비전 작렬"] = "얼음불꽃 화살",
-		["비전 탄막"] = "화염 작렬",
-		-- 화염
-		["화염구"] = "얼음불꽃 화살",
-		["지옥불 작렬"] = "화염 작렬",
-		["용의 숨결"] = "냉기 돌풍",
-		-- 냉기
-		["얼음창"] = "화염 작렬",
 		-- 특성
-		["무의 존재"] = "얼음 방패",
-		["상급 투명화"] = "투명화",
-		["초신성"] = "얼음 회오리",
-		["화염 폭풍"] = "얼음 회오리",
-		["서리 회오리"] = "얼음 회오리",
+		["일렁임"] = "점멸",
+		-- 냉기
+		["얼음 형상"] = "얼음 핏줄",
+
 	},
 	HUNTER = {
-		-- 특성
-		["코브라 사격"] = "고정 사격",
+		-- 야수
+		["광포한 격노"] = "광포한 야수",
 		["일점 사격"] = "고정 사격",
+		-- 사격
+		["강철 덫"] = "빙결 덫",
+		["마름쇠 덫"] = "타르 덫",
+		["도살"] = "저미기",
 	},
 	PRIEST = {
 		-- 신성
-		["빛의 권능: 평온"] = "빛의 권능: 응징",
-		["빛의 권능: 성역"] = "빛의 권능: 응징",
+		["상급 소실"] = "소실",
+		-- 수양
+		["사악의 정화"] = "어둠의 권능: 고통",
+		["어둠의 서약"] = "신의 권능: 광휘",
 		-- 암흑
-		["정신의 채찍"] = "성스러운 일격",
+		["정신의 쐐기"] = "정신의 채찍",
+		["정신 폭탄"] = "영혼의 절규",
 		-- 특성
 		["환각의 마귀"] = "어둠의 마귀",
-		["신의 권능: 위안"] = "신성한 불꽃",
-		["목적의 명료함"] = "치유의 기원",
+
+
 	},
 	PALADIN = {
+		-- 신성
+		["고결의 봉화"] = "빛의 봉화",
+		["응징의 성전사"] = "응징의 격노",
+		-- 보호
+		["수호자의 손길"] = "수호자의 빛",
+		["주문 수호의 축복"] = "보호의 축복",
+		["축복받은 망치"] = "정의의 망치",
+		["잊힌 여왕의 수호자"] = "고대 왕의 수호자",
 		-- 징벌
-		["진실의 문장"] = "지휘의 문장",
-		-- 특성
-		["심판의 주먹"] = "심판의 망치",
-		["영원의 불꽃"] = "영광의 서약",
-		["최후의 선고"] = "기사단의 선고",
+		["열정"] = "성전사의 일격",
+		["천상의 망치"] = "심판의 칼날",
+		["격노의 칼날"] = "심판의 칼날",
+		["성전"] = "응징의 격노",
 	},
 	MONK = {
 		-- 특성
-		["비취 돌풍"] = "회전 학다리차기",
 		["기공탄"] = "구르기",
-		["기 폭발"] = "후려차기",
+		["평온"] = "폭풍과 대지의 불",
 	},
 	WARRIOR = {
 		-- 무기
-		["필사의 일격"] = "영웅의 일격",
+		["쇠날발톱"] = "칼날폭풍",
+		["봉쇄"] = "돌진",
 		-- 방어
 		["피의 갈증"] = "영웅의 일격",
+		["대규모 주문 반사"] = "주문 반사",
 		-- 특성
 		["예견된 승리"] = "연전연승",
-		["대규모 주문 반사"] = "주문 반사",
-		["수비대장"] = "가로 막기",
-		["공성파쇄기"] = "위협의 외침",
 	},
 	SHAMAN = {
+		-- 정기
+		["용암 제어"] = "용암 쇄도",
+		["폭풍의 정령"] = "불의 정령",
 		-- 고양
-		["폭풍의 일격"] = "원시의 일격",
+		["바위주먹"] = "대지이빨",
+		["에테리얼 형상"] = "영혼 이동",
 		-- 복원
-		["물의 보호막"] = "번개 보호막",
+		["정신의 고리"] = "정신의 고리 토템",
 		-- 특성
-		["구속의 토템"] = "속박의 토템",
+		["부두 토템"] = "사술",
 	},
 	DEATHKNIGHT = {
-		-- 특성
-		["어둠의 질식"] = "질식 시키기",
+		-- 냉기
+		["굶주린 룬 무기"] = "룬 무기 강화",
+		-- 부정
+		["어둠의 중재자"] = "가고일 부르기",
 		["파멸"] = "죽음과 부패",
+		["할퀴는 어둠"] = "스컬지의 일격",
 	},
 	WARLOCK = {
 		-- 고통
-		["악마의 영혼: 불행"] = "악마의 영혼",
+		["영혼 흡수"] = "생명력 흡수",
 		-- 악마
-		["악마의 영혼: 지식"] = "악마의 영혼",
+		["악마 화살"] = "어둠의 화살",
 		-- 파괴
-		["제물"] = "부패",
-		["소각"] = "어둠의 화살",
-		["악마의 영혼: 불안정"] = "악마의 영혼",
+
+	},
+	DEMONHUNTER = {
+		-- 파멸
+		["악마 칼날"] = "악마의 이빨",
+		["황천 걸음"] = "흐릿해지기",
 	},
 }
 
@@ -239,11 +253,13 @@ end
 
 function IRF3:SelectClickCastingDB()
 	if InCombatLockdown() or not InvenRaidFrames3CharDB then return end
-	InvenRaidFrames3CharDB.clickCasting = InvenRaidFrames3CharDB.clickCasting or { {}, {} }
-
+	InvenRaidFrames3CharDB.clickCasting = InvenRaidFrames3CharDB.clickCasting or { {}, {}, {}, {} }
+	for i = 1, 4 do
+		InvenRaidFrames3CharDB.clickCasting[i] = InvenRaidFrames3CharDB.clickCasting[i] or {}
+	end
 	IRF3.playerClass = IRF3.playerClass or select(2, UnitClass("player"))
-	IRF3.specId, specId = GetSpecializationInfo(GetSpecialization(false, false, GetActiveSpecGroup(false) or 0) or 0), IRF3.specId--현재 사용 안함. 추후 사용을 위해 남겨둠.
-	IRF3.talent, talent = GetActiveSpecGroup(false) or 1, IRF3.talent
+	IRF3.specId, specId = GetSpecializationInfo(GetSpecialization(false, false, 0) or 0), IRF3.specId--현재 사용 안함. 추후 사용을 위해 남겨둠.
+	IRF3.talent, talent = GetSpecialization() or 1, IRF3.talent
 
 	if IRF3.specId ~= specId or IRF3.talent ~= talent then
 		IRF3.ccdb = InvenRaidFrames3CharDB.clickCasting[IRF3.talent]

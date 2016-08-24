@@ -245,10 +245,10 @@ end
 
 local function setupMemberAll(self)
 	InvenRaidFrames3Member_SetOptionTable(self, IRF3.db.units)
-	self.background:SetTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
+	self.background:SetColorTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
 	if self.petButton then
 		InvenRaidFrames3Member_SetOptionTable(self.petButton, IRF3.db.units)
-		self.petButton.background:SetTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
+		self.petButton.background:SetColorTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
 	end
 	setupMemberTexture(self)
 	setupMemberPowerBar(self)

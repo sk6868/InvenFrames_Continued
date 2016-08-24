@@ -132,7 +132,7 @@ function Option:CreateFrameMenu(menu, parent)
 	)
 	menu.highlightAlpha:SetPoint("TOP", menu.height, "BOTTOM", 0, -10)
 	local function updateBG(member)
-		member.background:SetTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
+		member.background:SetColorTexture(IRF3.db.units.backgroundColor[1], IRF3.db.units.backgroundColor[2], IRF3.db.units.backgroundColor[3], IRF3.db.units.backgroundColor[4])
 		if member.petButton then
 			updateBG(member.petButton)
 		end
@@ -248,7 +248,7 @@ function Option:CreateManaBarMenu(menu, parent)
 		end
 	)
 	menu.height:SetPoint("TOPRIGHT", -5, -5)
-	local colorList = { "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER" }
+	local colorList = { "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER", "LUNAR_POWER", "INSANITY", "FURY", "PAIN", "MAELSTROM" }
 	local function updateColor(member)
 		if member:IsVisible() then
 			InvenRaidFrames3Member_UpdatePowerColor(member)
@@ -402,9 +402,9 @@ function Option:CreatePartyTagMenu(menu, parent)
 		function() return IRF3.db.partyTagParty[1], IRF3.db.partyTagParty[2], IRF3.db.partyTagParty[3], IRF3.db.partyTagParty[4] end,
 		function(r, g, b, a)
 			IRF3.db.partyTagParty[1], IRF3.db.partyTagParty[2], IRF3.db.partyTagParty[3], IRF3.db.partyTagParty[4] = r, g, b, a
-			IRF3.headers[0].partyTag.tex:SetTexture(r, g, b, a)
+			IRF3.headers[0].partyTag.tex:SetColorTexture(r, g, b, a);
 			if IRF3.playerGroup then
-				IRF3.headers[IRF3.playerGroup].partyTag.tex:SetTexture(r, g, b, a)
+				IRF3.headers[IRF3.playerGroup].partyTag.tex:SetColorTexture(r, g, b, a);
 			end
 			Option:UpdatePreview()
 		end
@@ -416,7 +416,7 @@ function Option:CreatePartyTagMenu(menu, parent)
 			IRF3.db.partyTagRaid[1], IRF3.db.partyTagRaid[2], IRF3.db.partyTagRaid[3], IRF3.db.partyTagRaid[4] = r, g, b, a
 			for i = 1, 8 do
 				if i ~= IRF3.playerGroup then
-					IRF3.headers[IRF3.playerGroup].partyTag.tex:SetTexture(r, g, b, a)
+					IRF3.headers[IRF3.playerGroup].partyTag.tex:SetColorTexture(r, g, b, a);
 				end
 			end
 			Option:UpdatePreview()

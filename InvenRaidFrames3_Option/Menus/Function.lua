@@ -178,7 +178,7 @@ function Option:CreateRangeMenu(menu, parent)
 		end
 	)
 	menu.outrange:SetPoint("TOPLEFT", 5, -10)
-	menu.outRangeName = LBO:CreateWidget("CheckBox", parent, "먼 사정거리 직업별 이름 색상 사용", "사정거리가 벗어난 플레이어의 이름 색상을 직업 색상으로 표시합니다.", nil, nil, nil,
+	menu.outRangeName = LBO:CreateWidget("CheckBox", parent, "먼 사정거리 직업별 이름 색상 사용", "사정거리가 벗어난 플레이어의 이름 색상을 직업 색상으로 표시합니다. 사정거리를 벗어난 죽은 대상은 반투명한 이름으로 출력됩니다.", nil, nil, nil,
 		function()
 			return IRF3.db.units.outRangeName
 		end,

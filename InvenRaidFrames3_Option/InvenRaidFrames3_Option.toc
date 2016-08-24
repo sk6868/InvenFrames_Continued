@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: Inven Raid Frames 3: Option
 ## Notes: 인벤 레이드 프레임 3: 옵션창
 ## Dependencies: InvenRaidFrames3

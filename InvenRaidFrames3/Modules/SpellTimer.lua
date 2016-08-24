@@ -204,8 +204,8 @@ function IRF3:SetupSpellTimer(reset)
 		InvenRaidFrames3CharDB.spellTimer[1].name = SL(139)	-- 소생
 		InvenRaidFrames3CharDB.spellTimer[2].use = 1
 		InvenRaidFrames3CharDB.spellTimer[2].name = SL(33076)	-- 회복의 기원
-		InvenRaidFrames3CharDB.spellTimer[3].use = 4
-		InvenRaidFrames3CharDB.spellTimer[3].name = SL(6788)	-- 약화된 영혼
+		InvenRaidFrames3CharDB.spellTimer[3].use = 1
+		InvenRaidFrames3CharDB.spellTimer[3].name = SL(81749)	-- 속죄
 		InvenRaidFrames3CharDB.spellTimer[4].use = 3
 		InvenRaidFrames3CharDB.spellTimer[4].name = SL(17)	-- 신의 권능: 보호막
 		InvenRaidFrames3CharDB.spellTimer[5].use = 1

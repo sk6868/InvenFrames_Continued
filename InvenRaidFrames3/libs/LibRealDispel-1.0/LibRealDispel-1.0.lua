@@ -160,22 +160,13 @@ lib.enrageSpells[91668] = true
 
 if class == "WARRIOR" then
 	function scanDispel()
-		local isGlyphSlam = false
-		if IsSpellKnown(23922) then
-			for i = 1, GetNumGlyphSockets() do
-				local enabled, _, _, spellId = GetGlyphSocketInfo(i)
-				if enabled and (spellId or 0) == 58375 then
-					isGlyphSlam = true
-				end
-			end
-		end
 		lib.tranquilize = nil
-		lib.harm = isGlyphSlam
+		lib.harm = nil
 		wipe(lib.help)
 	end
 elseif class == "ROGUE" then
 	function scanDispel()
-		lib.tranquilize = IsSpellKnown(5938) and true or nil
+		lib.tranquilize = nil
 		lib.harm = nil
 		wipe(lib.help)
 	end
@@ -192,24 +183,22 @@ elseif class == "MAGE" then
 		lib.tranquilize = nil
 		lib.harm = IsSpellKnown(30449) and true or nil
 		wipe(lib.help)
-		lib.help.Curse = IsSpellKnown(475) and true or nil
 	end
 elseif class == "WARLOCK" then
 	function scanDispel()
 		lib.tranquilize = nil
-		lib.harm = IsSpellKnown(19505, true) and true or nil
+		lib.harm = nil
 		wipe(lib.help)
-		lib.help.Magic = IsSpellKnown(89808, true) and true or nil
 	end
 elseif class == "HUNTER" then
 	function scanDispel()
-		lib.tranquilize = IsSpellKnown(19801) and true or nil
-		lib.harm = lib.tranquilize
+		lib.tranquilize = nil
+		lib.harm = nil
 		wipe(lib.help)
 	end
 elseif class == "DRUID" then
 	function scanDispel()
-		lib.tranquilize = IsSpellKnown(2908) and true or nil
+		lib.tranquilize = nil
 		lib.harm = nil
 		wipe(lib.help)
 		lib.help.Curse = (IsSpellKnown(2782) or IsSpellKnown(88423)) and true or nil
@@ -221,29 +210,31 @@ elseif class == "SHAMAN" then
 		lib.tranquilize = nil
 		lib.harm = IsSpellKnown(370) and true or nil
 		wipe(lib.help)
-		lib.help.Curse = (IsSpellKnown(51886) or IsPlayerSpell(77130)) and true or nil
-		lib.help.Magic = IsPlayerSpell(77130) and true or nil
+		lib.help.Curse = (IsSpellKnown(51886) or IsSpellKnown(77130)) and true or nil
+		lib.help.Magic = IsSpellKnown(77130) and true or nil
 	end
 elseif class == "PALADIN" then
 	function scanDispel()
 		lib.tranquilize = nil
 		lib.harm = nil
 		wipe(lib.help)
-		lib.help.Poison = IsSpellKnown(4987) and true or nil
-		if lib.help.Poison then
-			lib.help.Disease = true
-			lib.help.Magic = IsPlayerSpell(53551) and true or nil
-		end
+		lib.help.Poison = (IsSpellKnown(213644) or IsSpellKnown(4987)) and true or nil
+		lib.help.Disease = lib.help.Poison
+		lib.help.Magic = IsSpellKnown(4987) and true or nil
 	end
 elseif class == "MONK" then
 	function scanDispel()
 		lib.tranquilize = nil
 		lib.harm = nil
-		lib.help.Poison = IsSpellKnown(115450) and true or nil
-		if lib.help.Poison then
-			lib.help.Disease = true
-			lib.help.Magic = IsPlayerSpell(115451) and true or nil
-		end
+		lib.help.Poison = (IsSpellKnown(218164) or IsSpellKnown(115450)) and true or nil
+		lib.help.Disease = lib.help.Poison
+		lib.help.Magic = IsSpellKnown(115450) and true or nil
+	end
+elseif class == "DEMONHUNTER" then
+	function scanDispel()
+		lib.tranquilize = nil
+		lib.harm = nil
+		wipe(lib.help)
 	end
 else
 	lib.Dispel = lib.blankfunc

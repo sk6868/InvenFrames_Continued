@@ -58,6 +58,51 @@ IRF3.bossAura = {
 	[49026] = true, [99837] = true, [99936] = true, [99262] = true, [100094] = true,
 	[99263] = true, [99516] = true, [98450] = true, [99399] = true, [100238] = true,
 	[100460] = true,
+	-- 용의 영혼, 판다리아의 안개, 드레노어의 전쟁군주, 기타등등
+	[116278] = true, [120629] = true, [136228] = true, [156214] = true, [145568] = true,
+	[158605] = true, [159179] = true, [146589] = true, [172886] = true, [180313] = true,
+	[150032] = true, [143434] = true, [140661] = true, [147068] = true, [140502] = true,
+	[156631] = true, [136295] = true, [188666] = true, [153795] = true, [162497] = true,
+	[143436] = true, [184587] = true, [152999] = true, [111850] = true, [173240] = true,
+	[145987] = true, [182006] = true, [144330] = true, [142864] = true, [106400] = true,
+	[34976] = true, [122752] = true, [99308] = true, [153001] = true, [142865] = true,
+	[140092] = true, [144459] = true, [157018] = true, [145065] = true, [186407] = true,
+	[144364] = true, [168398] = true, [189627] = true, [164191] = true, [149975] = true,
+	[166200] = true, [151697] = true, [156096] = true, [122706] = true, [163364] = true,
+	[154981] = true, [186123] = true, [174425] = true, [181597] = true, [120268] = true,
+	[108649] = true, [156225] = true, [155225] = true, [139204] = true, [181306] = true,
+	[122370] = true, [179864] = true, [117878] = true, [182459] = true, [162346] = true,
+	[181753] = true, [180025] = true, [137633] = true, [164004] = true, [105479] = true,
+	[162283] = true, [111631] = true, [142863] = true, [187110] = true, [145071] = true,
+	[180164] = true, [149980] = true, [115297] = true, [180389] = true, [180166] = true,
+	[145263] = true, [123011] = true, [133597] = true, [146124] = true, [164006] = true,
+	[143638] = true, [182008] = true, [181275] = true, [188104] = true,
+	[112955] = true, [122151] = true, [225080] = true, [147209] = true, [179977] = true,
+	[118135] = true, [75056] = true, [155242] = true, [138349] = true, [159558] = true,
+	[106794] = true, [189030] = true, [185237] = true, [185014] = true, [155721] = true,
+	[82850] = true, [162415] = true, [138732] = true, [182879] = true, [186481] = true,
+	[185238] = true, [181508] = true, [118961] = true, [188929] = true, [134366] = true,
+	[184360] = true, [185806] = true, [189032] = true, [156934] = true, [135695] = true,
+	[157763] = true, [140701] = true, [155277] = true, [144089] = true, [150751] = true,
+	[111600] = true, [139202] = true, [181957] = true, [100048] = true, [117436] = true,
+	[185241] = true, [116161] = true, [170132] = true, [107268] = true, [145206] = true,
+	[143198] = true, [181990] = true, [159947] = true, [157000] = true, [188148] = true,
+	[155236] = true, [145175] = true, [160029] = true, [138609] = true, [143445] = true,
+	[134912] = true, [117708] = true, [123812] = true, [181099] = true, [144351] = true,
+	[142913] = true, [134626] = true, [136857] = true, [107094] = true, [180526] = true,
+	[182088] = true, [100024] = true, [139822] = true, [118562] = true, [174716] = true,
+	[181515] = true, [182280] = true, [156047] = true, [99126] = true, [176001] = true,
+	[156653] = true, [134755] = true, [154932] = true, [143840] = true, [164176] = true,
+	[164178] = true, [147665] = true, [106872] = true, [136922] = true, [121949] = true,
+	[142948] = true, [164005] = true, [175583] = true, [180079] = true, [155061] = true,
+	[136478] = true, [123081] = true, [123705] = true, [147029] = true, [158026] = true,
+	[116260] = true, [155030] = true, [187471] = true, [154960] = true, [189551] = true,
+	[166579] = true, [118303] = true, [181488] = true, [184324] = true, [155240] = true,
+	[134256] = true, [183634] = true, [189031] = true, [145171] = true, [137341] = true,
+	[186333] = true, [158315] = true, [184102] = true, [180200] = true, [181841] = true,
+	[99256] = true, [155192] = true, [143494] = true, [189434] = true, [159113] = true,
+	[185510] = true, [136992] = true, [184964] = true, [158986] = true, [179202] = true,
+	[137375] = true, [158010] = true,
 }
 
 local dispelTypes = { Magic = "Magic", Curse = "Curse", Disease = "Disease", Poison = "Poison" }
@@ -168,9 +213,9 @@ function InvenRaidFrames3Member_UpdateAura(self)
 						debuffIcon:SetSize(self.optionTable.debuffIconSize, self.optionTable.debuffIconSize)
 						debuffIcon:SetID(i)
 						if IRF3.db.colors[debuffType] then
-							debuffIcon.color:SetTexture(IRF3.db.colors[debuffType][1], IRF3.db.colors[debuffType][2], IRF3.db.colors[debuffType][3])
+							debuffIcon.color:SetColorTexture(IRF3.db.colors[debuffType][1], IRF3.db.colors[debuffType][2], IRF3.db.colors[debuffType][3])
 						else
-							debuffIcon.color:SetTexture(0, 0, 0)
+							debuffIcon.color:SetColorTexture(0, 0, 0)
 						end
 						debuffIcon.icon:SetTexture(icon)
 						debuffIcon.count:SetText(count and count > 1 and count or nil)

@@ -86,11 +86,19 @@ local default = {
 		DEATHKNIGHT = { RAID_CLASS_COLORS.DEATHKNIGHT.r, RAID_CLASS_COLORS.DEATHKNIGHT.g, RAID_CLASS_COLORS.DEATHKNIGHT.b },
 		MONK = { RAID_CLASS_COLORS.MONK.r, RAID_CLASS_COLORS.MONK.g, RAID_CLASS_COLORS.MONK.b },
 		DEMONHUNTER = { RAID_CLASS_COLORS.DEMONHUNTER.r, RAID_CLASS_COLORS.DEMONHUNTER.g, RAID_CLASS_COLORS.DEMONHUNTER.b },
+		--- Character Resources
 		MANA = { PowerBarColor.MANA.r, PowerBarColor.MANA.g, PowerBarColor.MANA.b },
 		RAGE = { PowerBarColor.RAGE.r, PowerBarColor.RAGE.g, PowerBarColor.RAGE.b },
 		FOCUS = { PowerBarColor.FOCUS.r, PowerBarColor.FOCUS.g, PowerBarColor.FOCUS.b },
 		ENERGY = { PowerBarColor.ENERGY.r, PowerBarColor.ENERGY.g, PowerBarColor.ENERGY.b },
 		RUNIC_POWER = { PowerBarColor.RUNIC_POWER.r, PowerBarColor.RUNIC_POWER.g, PowerBarColor.RUNIC_POWER.b },
+		--- added 7.0.3 legion resources.
+		LUNAR_POWER = { PowerBarColor.LUNAR_POWER.r, PowerBarColor.LUNAR_POWER.g, PowerBarColor.LUNAR_POWER.b }, --- Balance Druid 
+		INSANITY = { PowerBarColor.INSANITY.r, PowerBarColor.INSANITY.g, PowerBarColor.INSANITY.b }, ---Shadow Priest 
+		FURY = { PowerBarColor.FURY.r, PowerBarColor.FURY.g, PowerBarColor.FURY.b }, --- Demon Hunter
+		PAIN = { PowerBarColor.PAIN.r, PowerBarColor.PAIN.g, PowerBarColor.PAIN.b }, --- Demon Hunter
+		MAELSTROM = { PowerBarColor.MAELSTROM.r, PowerBarColor.MAELSTROM.g, PowerBarColor.MAELSTROM.b }, --- Enhancement Shaman
+		--- Debuff/buffs color
 		Magic = { DebuffTypeColor.Magic.r, DebuffTypeColor.Magic.g, DebuffTypeColor.Magic.b },
 		Curse = { DebuffTypeColor.Curse.r, DebuffTypeColor.Curse.g, DebuffTypeColor.Curse.b },
 		Disease = { DebuffTypeColor.Disease.r, DebuffTypeColor.Disease.g, DebuffTypeColor.Disease.b },
@@ -291,7 +299,7 @@ function IRF3:UpdateGroupFilter()
 	groupfilter = nil
 	if self.db.partyTag and self.db.groupby == "GROUP" then
 		self.headers[0].partyTag:Show()
-		self.headers[0].partyTag.tex:SetTexture(unpack(self.db.partyTagParty))
+		self.headers[0].partyTag.tex:SetColorTexture(unpack(self.db.partyTagParty))
 		self.headers[0].partyTag.text:SetText(setPartyTag(self.headers[0]) and "내 파티" or "P")
 	else
 		self.headers[0].partyTag:Hide()
@@ -302,7 +310,7 @@ function IRF3:UpdateGroupFilter()
 		for i = 1, 8 do
 			if self.db.partyTag then
 				self.headers[i].partyTag:Show()
-				self.headers[i].partyTag.tex:SetTexture(unpack(i == self.playerGroup and self.db.partyTagParty or self.db.partyTagRaid))
+				self.headers[i].partyTag.tex:SetColorTexture(unpack(i == self.playerGroup and self.db.partyTagParty or self.db.partyTagRaid))
 				self.headers[i].partyTag.text:SetFormattedText(setPartyTag(self.headers[i]) and "파티 %d" or "%d", i)
 			else
 				self.headers[i].partyTag:Hide()
