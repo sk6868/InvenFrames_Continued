@@ -379,8 +379,8 @@
 				<Rotation targetKey="$parent.$parent.rotatingRing" degrees="-180" duration="0.75" order="1"/>
 				<Scale targetKey="$parent.$parent.expandingRing" scaleX="1.75" scaleY="1.75" duration="0.75" order="1"/>
 				<Scripts>
-					<OnPlay function="WorldMapPing_OnPlay"/>
-					<OnLoop function="WorldMapPing_OnLoop"/>
+					<!-- <OnPlay function="WorldMapPing_OnPlay"/> -->
+					<!--<OnLoop function="WorldMapPing_OnLoop"/> -->
 				</Scripts>
 			</AnimationGroup>
 		</Animations>
