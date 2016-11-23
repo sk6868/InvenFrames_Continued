@@ -26,10 +26,10 @@ local function createButton(btn)
 	return btn
 end
 
-local classList = { "WARRIOR", "PRIEST", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "DEMONHUNTER" }
-local powerColor = { WARRIOR = "1", PRIEST = "0", ROGUE = "3", MAGE = "0", WARLOCK = "0", HUNTER = "2", DRUID = "013", SHAMAN = "0", PALADIN = "0", DEATHKNIGHT = "6", DEMONHUNTER = "0"}
-local powerMatch = { ["0"] = "MANA", ["1"] = "RAGE", ["2"] = "FOCUS", ["3"] = "ENERGY", ["6"] = "RUNIC_POWER" }
-local allPower = "01236"
+local classList = { "WARRIOR", "PRIEST", "ROGUE", "MAGE", "WARLOCK", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "DEATHKNIGHT", "MONK", "DEMONHUNTER" }
+local powerColor = { WARRIOR = "1", PRIEST = "05", ROGUE = "3", MAGE = "0", WARLOCK = "0", HUNTER = "2", DRUID = "013", SHAMAN = "09", PALADIN = "0", DEATHKNIGHT = "6", MONK ="03", DEMONHUNTER = "78" }
+local powerMatch = { ["0"] = "MANA", ["1"] = "RAGE", ["2"] = "FOCUS", ["3"] = "ENERGY", ["4"] = "LUNAR_POWER", ["5"] = "INSANITY", ["6"] = "RUNIC_POWER", ["7"] = "PAIN", ["8"] = "FURY", ["9"] = "MAELSTROM" }
+local allPower = "0123456789"
 
 local function createPreview()
 	createPreview = nil
@@ -63,7 +63,7 @@ local function createPreview()
 		preview.headers[i].members, preview.headers[i].visible = {}, 5
 		for j = 1, 5 do
 			preview.headers[i].members[j] = createButton(preview.headers[i])
-			preview.headers[i].members[j].class = classList[random(1, 10)]
+			preview.headers[i].members[j].class = classList[random(1, 12)]
 			height = random(1, powerColor[preview.headers[i].members[j].class]:len())
 			preview.headers[i].members[j].powerBar.color = powerMatch[powerColor[preview.headers[i].members[j].class]:sub(height, height)]
 			preview.headers[i].members[j].petButton = createButton(preview.headers[i].members[j])

@@ -103,6 +103,9 @@ IRF3.bossAura = {
 	[99256] = true, [155192] = true, [143494] = true, [189434] = true, [159113] = true,
 	[185510] = true, [136992] = true, [184964] = true, [158986] = true, [179202] = true,
 	[137375] = true, [158010] = true,
+
+	-- 군단 7.0
+	[192048] = true, [203774] = true, [222178] = true, [41425] = false, [210863] = true, [205201] = true, [210879] = true, [80354] = false, [224188] = true, [204611] = true, [217093] = true, [206651] = true, [204895] = true, [208431] = true, [194327] = true, [211471] = true, [211802] = true, [196068] = true, [204463] = true, [219024] = true, [215449] = true, [197943] = true, [205771] = true, [208929] = true, [219025] = true, [221246] = true, [209158] = true, [193783] = true, [210315] = true, [203770] = true, [198190] = true, [199063] = true, [204859] = true, [198006] = true, [211939] = true, [192706] = true, [204962] = true, [201146] = true, [221028] = true, [203096] = true, [218350] = true, [204517] = true, [218368] = true, [193069] = true,
 }
 
 local dispelTypes = { Magic = "Magic", Curse = "Curse", Disease = "Disease", Poison = "Poison" }

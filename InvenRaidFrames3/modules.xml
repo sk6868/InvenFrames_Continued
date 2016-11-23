@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
 
 <Script file="Modules\Aggro.lua"/>
+<Script file="Modules\Buff.lua"/>
 <Script file="Modules\ClickCasting.lua"/>
 <Script file="Modules\Text.lua"/>
 <Script file="Modules\Icons.lua"/>
@@ -9,7 +10,6 @@
 <Script file="Modules\CastingBar.lua"/>
 <Script file="Modules\PowerBarAlt.lua"/>
 <Script file="Modules\ReadyCheck.lua"/>
-<Script file="Modules\Buff.lua"/>
 <Script file="Modules\Debuff.lua"/>
 <Script file="Modules\SurvivalSkill.lua"/>
 <Script file="Modules\SpellTimer.lua"/>
